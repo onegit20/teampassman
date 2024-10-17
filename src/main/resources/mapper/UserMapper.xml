@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.yanyong.teampassman.mapper.UserMapper">
+    <select id="listUsersWithVaults" resultMap="listUsersWithVaultsResultMap">
+        select
+            u.id,
+            u.username,
+            u.password,
+            u.nickname,
+            u.avatar,
+            u.phone,
+            u.email,
+            v.id as vault_id,
+            v.name as vault_name,
+            v.user_id as vault_user_id,
+            v.description as vault_description
+        from (select * from teampassman_user limit #{row_count} offset #{offset}) u
+        left join vault v
+        on u.id = v.user_id
+    </select>
+
+    <resultMap id="listUsersWithVaultsResultMap" type="cc.yanyong.teampassman.entity.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <collection property="vaults" ofType="cc.yanyong.teampassman.entity.Vault">
+            <id property="id" column="vault_id"/>
+            <result property="name" column="vault_name"/>
+            <result property="userId" column="vault_user_id"/>
+            <result property="description" column="vault_description"/>
+        </collection>
+    </resultMap>
+</mapper>

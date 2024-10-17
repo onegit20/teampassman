@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    active:
+      - common
+      - dev
+---
+# 公共配置
+spring:
+  application:
+    name: teampassman
+  config:
+    activate:
+      on-profile:
+        - common
+  security:
+    user:  # spring security用户名、密码
+      name: admin
+      password: 123
+---
+# 开发环境
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # https://dev.mysql.com/doc/connector-j/en/connector-j-reference-configuration-properties.html
+    url : jdbc:mysql://localhost:3306/teampassman?sslMode=PREFERRED&connectionTimeZone=Asia/Shanghai
+    username: root
+    password: sevb666
+  data:
+    redis:
+      host: 172.27.244.150
+      port: 6379
+      password: redis#456
+      database: 0
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开户控制台sql日志
+
+springdoc:
+  api-docs:
+    enabled: true  # 默认true，生产环境可以关闭swagger避免风险
+  swagger-ui:
+    enabled: true  # 默认true，是否开启ui
+    urls-primary-name: teampassman-api  # ui中默认选中的分组
+---
